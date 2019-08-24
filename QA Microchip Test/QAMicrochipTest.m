@@ -1,0 +1,81 @@
+
+%% Initialization
+clear;	close all; clc
+
+%% Load Data
+%  The first two columns contains the X values and the third column
+%  contains the label (y).
+
+data = load('data.txt');
+X = data(:, [1, 2]); 
+y = data(:, 3);
+
+
+%% ==================== Plotting graph ====================
+
+fprintf(['Plotting data with + indicating (y = 1) examples and o ' ...
+         'indicating (y = 0) examples.\n']);
+plotData(X, y);
+
+fprintf('\nProgram paused. Press enter to continue.\n');
+pause;
+
+
+%% =========== Regularized Logistic Regression ============
+
+%  Add polynomial features to our data matrix (similar to 
+%  polynomial regression).
+
+% Add Polynomial Features
+
+% Note that mapFeature also adds a column of ones for us, so the intercept
+% term is handled
+X = mapFeature(X(:,1), X(:,2));
+
+% Initialize fitting parameters
+initial_theta = zeros(size(X, 2), 1);
+
+% Set regularization parameter lambda to 1
+lambda = 1;
+
+% Compute and display initial cost and gradient for regularized logistic
+% regression
+[cost, grad] = costFunctionReg(initial_theta, X, y, lambda);
+
+fprintf('Cost at initial theta (zeros): %f\n', cost);
+
+fprintf('\nProgram paused. Press enter to continue.\n');
+pause;
+
+
+%% ============= Regularization and Accuracies =============
+
+%  Here, Try the following values of lambda (0, 1, 10, 100).
+%  How does the decision boundary change when you vary lambda? How does
+%  the training set accuracy vary?
+
+% Initialize fitting parameters
+initial_theta = zeros(size(X, 2), 1);
+
+% Set regularization parameter lambda to 1 (you should vary this)
+lambda = 1;
+
+
+% Set Options
+options = optimset('GradObj', 'on', 'MaxIter', 400);
+
+% Optimize
+[theta, J, exit_flag] = ...
+	fminunc(@(t)(costFunctionReg(t, X, y, lambda)), initial_theta, options);
+	
+% Plot Boundary
+plotDecisionBoundary(theta, X, y);
+
+title(sprintf('lambda = %g', lambda))
+
+% Compute accuracy on our training set
+p = predict(theta, X);
+
+fprintf('Train Accuracy: %f\n', mean(double(p == y)) * 100);
+	
+	
