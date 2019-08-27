@@ -14,7 +14,7 @@ n = size(X, 2);
 
 % Return the following variables
 all_theta = zeros(num_labels, n + 1);
-size(all_theta)
+%size(all_theta)
 
 % Add ones to the X data matrix
 X = [ones(m, 1) X];
