@@ -39,4 +39,5 @@ Theta_grad = zeros(size(Theta));
 
 grad = [X_grad(:); Theta_grad(:)];
 
+
 end
